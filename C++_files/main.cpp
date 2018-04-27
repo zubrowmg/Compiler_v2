@@ -14,7 +14,11 @@ using namespace std;
 
 Scanner scan; Token tok;
 
-//TEST
+//TEST2git
+
+
+
+
 
 bool parameterCheck(int argc, char *argv[]){								
 	if (argc != 2){										//this condition makes sure that there is a second parameter
