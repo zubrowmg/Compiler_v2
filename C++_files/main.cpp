@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Scanner scan; Token tok;
+Scanner scan; Token tok; WrapperPass2 wrapper;
 
 
 bool parameterCheck(int argc, char *argv[]){								
@@ -27,6 +27,13 @@ bool parameterCheck(int argc, char *argv[]){
 	} 	
 }
 
+void startPass2(){
+	while (tok.type != "T_ENDFILE"){
+		tok = scan.getToken();
+		wrapper.getToken(tok);
+	}
+}
+
 int main(int argc, char *argv[]){	
 	bool correct_input = false;
 	correct_input = parameterCheck(argc, argv);
@@ -35,9 +42,7 @@ int main(int argc, char *argv[]){
 
 	if (correct_input){
 		scan.scanInit(argv);
-		//while (tok.type != "T_ENDFILE"){
-			//tok = scan.getToken();
-		//}
+		startPass2();
 	}
 
 		

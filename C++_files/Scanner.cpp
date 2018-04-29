@@ -3,7 +3,7 @@
 //#include <cstdlib>
 #include <string>
 #include <string.h>
-//#include <vector> 
+#include <queue> 
 #include <stdio.h>
 
 #include "Structures.h"
@@ -11,6 +11,10 @@
 #include "Error.h"
 
 using namespace std;
+
+Scanner::Scanner(){
+	current_vector_pos = 0;
+}
 
 int isLetter(char c){
 	if (c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e' || c == 'f' || c == 'g' || c == 'h' || c == 'i' || c == 'j' || c == 'k' || c == 'l' || c == 'm' || c == 'n' || c == 'o' || c == 'p' || c == 'q' || c == 'r' || c == 's' || c == 't' || c == 'u' || c == 'v' || c == 'w' || c == 'x' || c == 'y' || c == 'z'
@@ -102,7 +106,7 @@ void Scanner::scanInit(char *argv[]){
 					number_checker = true;
 				} else {
 					number_checker = false;
-					tok.type = "T_PERIOD"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_PERIOD"; tok.line_number = line_counter; tok_list.push(tok);
 					tok = clearToken(tok);
 				}
 			}
@@ -135,7 +139,7 @@ void Scanner::scanInit(char *argv[]){
 				We only want to record the token if it was a number token, not a period token 
 			-------------------------------------------------------------------------------*/
 			if (record_token){
-				tok.type = "T_NUMBERVAL"; tok.line_number = line_counter; tok_list.push_back(tok);
+				tok.type = "T_NUMBERVAL"; tok.line_number = line_counter; tok_list.push(tok);
 				tok = clearToken(tok);
 			}
 
@@ -168,31 +172,31 @@ void Scanner::scanInit(char *argv[]){
 			/*------------------------  
 				Reserved Token Section 
 			------------------------*/
-			if (reservedWordChecker(tok, "program")){tok.type = "T_PROGRAM"; tok.line_number = line_counter; tok_list.push_back(tok); }
-			else if (reservedWordChecker(tok, "is")){tok.type = "T_IS"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "begin")){tok.type = "T_BEGIN"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "end")){tok.type = "T_END"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "global")){tok.type = "T_GLOBAL"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "procedure")){tok.type = "T_PROCEDURE"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "in")){tok.type = "T_IN"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "out")){tok.type = "T_OUT"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "inout")){tok.type = "T_INOUT"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "integer")){tok.type = "T_INTEGER"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "float")){tok.type = "T_FLOAT"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "bool")){tok.type = "T_BOOL"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "char")){tok.type = "T_CHAR"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "if")){tok.type = "T_IF"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "then")){tok.type = "T_THEN"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "else")){tok.type = "T_ELSE"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "for")){tok.type = "T_FOR"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "return")){tok.type = "T_RETURN"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "true")){tok.type = "T_TRUE"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "false")){tok.type = "T_FALSE"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "not")){tok.type = "T_NOT"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (reservedWordChecker(tok, "string")){tok.type = "T_STRING"; tok.line_number = line_counter; tok_list.push_back(tok);}
+			if (reservedWordChecker(tok, "program")){tok.type = "T_PROGRAM"; tok.line_number = line_counter; tok_list.push(tok); }
+			else if (reservedWordChecker(tok, "is")){tok.type = "T_IS"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "begin")){tok.type = "T_BEGIN"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "end")){tok.type = "T_END"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "global")){tok.type = "T_GLOBAL"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "procedure")){tok.type = "T_PROCEDURE"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "in")){tok.type = "T_IN"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "out")){tok.type = "T_OUT"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "inout")){tok.type = "T_INOUT"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "integer")){tok.type = "T_INTEGER"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "float")){tok.type = "T_FLOAT"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "bool")){tok.type = "T_BOOL"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "char")){tok.type = "T_CHAR"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "if")){tok.type = "T_IF"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "then")){tok.type = "T_THEN"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "else")){tok.type = "T_ELSE"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "for")){tok.type = "T_FOR"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "return")){tok.type = "T_RETURN"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "true")){tok.type = "T_TRUE"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "false")){tok.type = "T_FALSE"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "not")){tok.type = "T_NOT"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (reservedWordChecker(tok, "string")){tok.type = "T_STRING"; tok.line_number = line_counter; tok_list.push(tok);}
 			
 			else {
-				tok.type = "T_IDENTIFIER"; tok.line_number = line_counter; tok_list.push_back(tok);
+				tok.type = "T_IDENTIFIER"; tok.line_number = line_counter; tok_list.push(tok);
 				tok = clearToken(tok);
 			}
 			tok = clearToken(tok);
@@ -234,7 +238,7 @@ void Scanner::scanInit(char *argv[]){
 				} 
 			}
 
-			tok.type = "T_CHARVAL"; tok.line_number = line_counter; tok_list.push_back(tok);
+			tok.type = "T_CHARVAL"; tok.line_number = line_counter; tok_list.push(tok);
 			tok = clearToken(tok);
 			skip = false; leave_while = false;
 			j = 0;
@@ -268,7 +272,7 @@ void Scanner::scanInit(char *argv[]){
 				
 			}
 
-			tok.type = "T_STRINGVAL"; tok.line_number = line_counter; tok_list.push_back(tok);
+			tok.type = "T_STRINGVAL"; tok.line_number = line_counter; tok_list.push(tok);
 			tok = clearToken(tok);
 			leave_while = false;
 			j = 0;
@@ -287,7 +291,7 @@ void Scanner::scanInit(char *argv[]){
 			else if (c == '='){ 
 				inFile.get(c); 
 				if (c == '='){
-					tok.type = "T_EQUALTO"; tok.actual_value = "=="; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_EQUALTO"; tok.actual_value = "=="; tok.line_number = line_counter; tok_list.push(tok);
 					
 				} else {
 					//temp.type = "T_ASSIGN"; current_token.line = line_counter; token_list.createnode(temp);
@@ -298,41 +302,41 @@ void Scanner::scanInit(char *argv[]){
 				
 				inFile.get(c); 
 				if (c == '='){
-					tok.type = "T_ASSIGN"; tok.actual_value = ":="; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_ASSIGN"; tok.actual_value = ":="; tok.line_number = line_counter; tok_list.push(tok);
 					
 				} else {
-					tok.type = "T_COLON"; tok.actual_value = ":"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_COLON"; tok.actual_value = ":"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}	
 			}
-			else if (c == '&'){ tok.type = "T_AND"; tok.actual_value = "&"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == '|'){ tok.type = "T_OR"; tok.actual_value = "|"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == '+'){ tok.type = "T_ADD"; tok.actual_value = "+"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == '-'){ tok.type = "T_MINUS"; tok.actual_value = "-"; tok.line_number = line_counter; tok_list.push_back(tok);}
+			else if (c == '&'){ tok.type = "T_AND"; tok.actual_value = "&"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == '|'){ tok.type = "T_OR"; tok.actual_value = "|"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == '+'){ tok.type = "T_ADD"; tok.actual_value = "+"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == '-'){ tok.type = "T_MINUS"; tok.actual_value = "-"; tok.line_number = line_counter; tok_list.push(tok);}
 			else if (c == '<'){ 
 				inFile.get(c); 
 				if (c == '='){
-					tok.type = "T_LESSTHANEQUAL"; tok.actual_value = "<=";  tok.line_number = line_counter; tok_list.push_back(tok);;
+					tok.type = "T_LESSTHANEQUAL"; tok.actual_value = "<=";  tok.line_number = line_counter; tok_list.push(tok);;
 				} else {
-					tok.type = "T_LESSTHAN"; tok.actual_value = "<"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_LESSTHAN"; tok.actual_value = "<"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}				
 			}
 			else if (c == '>'){ 			
 				inFile.get(c); 
 				if (c == '='){
-					tok.type = "T_GREATERTHANEQUAL"; tok.actual_value = ">="; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_GREATERTHANEQUAL"; tok.actual_value = ">="; tok.line_number = line_counter; tok_list.push(tok);
 				} else {
-					tok.type = "T_GREATERTHAN"; tok.actual_value = ">"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_GREATERTHAN"; tok.actual_value = ">"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}			
 			}
 			else if (c == '!'){
 				inFile.get(c);  
 				if (c == '='){
-					tok.type = "T_NOTEQUALTO"; tok.actual_value = "!="; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_NOTEQUALTO"; tok.actual_value = "!="; tok.line_number = line_counter; tok_list.push(tok);
 				} else {
-					tok.type = "T_EXLAMANTION"; tok.actual_value = "!"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_EXLAMANTION"; tok.actual_value = "!"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}
 			}
@@ -346,7 +350,7 @@ void Scanner::scanInit(char *argv[]){
 						num_of_comments--;
 					}
 				} else {
-					tok.type = "T_MULT"; tok.actual_value = "*"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_MULT"; tok.actual_value = "*"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}
 			} else if (c == '/'){ 
@@ -388,19 +392,19 @@ void Scanner::scanInit(char *argv[]){
 					num_of_comments = 0;
 					nest_comment = false;
 				} else {
-					tok.type = "T_DIVIDE"; tok.actual_value = "/"; tok.line_number = line_counter; tok_list.push_back(tok);
+					tok.type = "T_DIVIDE"; tok.actual_value = "/"; tok.line_number = line_counter; tok_list.push(tok);
 					grab_prev_c = true;
 				}
 			}
-			else if (c == ','){ tok.type = "T_COMMA"; tok.actual_value = ","; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == ';'){ tok.type = "T_SEMICOLON"; tok.actual_value = ";"; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == '('){ tok.type = "T_LPARANTH"; tok.actual_value = "("; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == ')'){ tok.type = "T_RPARANTH"; tok.actual_value = ")"; tok.line_number = line_counter; tok_list.push_back(tok);} 
-			else if (c == '['){ tok.type = "T_LBRACKET"; tok.actual_value = "["; tok.line_number = line_counter; tok_list.push_back(tok);}
-			else if (c == ']'){ tok.type = "T_RBRACKET"; tok.actual_value = "]"; tok.line_number = line_counter; tok_list.push_back(tok);}
+			else if (c == ','){ tok.type = "T_COMMA"; tok.actual_value = ","; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == ';'){ tok.type = "T_SEMICOLON"; tok.actual_value = ";"; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == '('){ tok.type = "T_LPARANTH"; tok.actual_value = "("; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == ')'){ tok.type = "T_RPARANTH"; tok.actual_value = ")"; tok.line_number = line_counter; tok_list.push(tok);} 
+			else if (c == '['){ tok.type = "T_LBRACKET"; tok.actual_value = "["; tok.line_number = line_counter; tok_list.push(tok);}
+			else if (c == ']'){ tok.type = "T_RBRACKET"; tok.actual_value = "]"; tok.line_number = line_counter; tok_list.push(tok);}
 			
 
-			else {tok.type = "T_UNKOWN"; tok.line_number = line_counter; tok_list.push_back(tok); error_handler.error(line_counter, 1);}
+			else {tok.type = "T_UNKOWN"; tok.line_number = line_counter; tok_list.push(tok); error_handler.error(line_counter, 1);}
 				
 			tok = clearToken(tok);
 		} 
@@ -408,7 +412,7 @@ void Scanner::scanInit(char *argv[]){
 		peeker = inFile.peek();
 
 		if (peeker == EOF){
-			tok.type = "T_ENDFILE"; tok.line_number = line_counter; tok_list.push_back(tok);
+			tok.type = "T_ENDFILE"; tok.line_number = line_counter; tok_list.push(tok);
 			tok = clearToken(tok);
 		}
 
@@ -420,14 +424,20 @@ void Scanner::scanInit(char *argv[]){
 
 
 Token Scanner::getToken(){
-	Token tok;
-	
-
-	return tok;
+	Token temp_tok;
+	if (!tok_list.empty()){
+		temp_tok = tok_list.front();
+		tok_list.pop();
+	}
+	return temp_tok;
 }
 
 void Scanner::print(){
-	for (int i = 0; i < tok_list.size(); i++){
-		cout << '[' << tok_list[i].line_number << ']' << " " << tok_list[i].actual_value << " " << tok_list[i].type << endl;
+	queue<Token> temp_list; Token temp_tok;
+	temp_list = tok_list;
+	for (int i = 0; i < temp_list.size(); i++){
+		temp_tok = temp_list.front();
+		temp_list.pop();
+		cout << '[' << temp_tok.line_number << ']' << " " << temp_tok.actual_value << " " << temp_tok.type << endl;
 	}
 }

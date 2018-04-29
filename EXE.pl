@@ -1,5 +1,5 @@
 #print "$ARGV[0] \n";
-system("g++", "-std=c++11", "-o", "Exe", "C++_files/main.cpp", "C++_files/Scanner.cpp", "C++_files/Error.cpp");
+system("g++", "-std=c++11", "-o", "Exe", "C++_files/main.cpp", "C++_files/Scanner.cpp", "C++_files/Error.cpp", "C++_files/WrapperPass2.cpp");
 system("./Exe $ARGV[0]");
 
 #Checks If there were errors, won't run if there are any
