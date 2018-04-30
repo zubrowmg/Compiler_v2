@@ -124,6 +124,8 @@ void Error::error(int line, int type, std::string var){
 		cout << "Procedure Call Has Arguments When There Should Be None - " << var << endl;
 	} else if (type == 4){
 		cout << "Procedure Call Has Too Many Arguments - " << var << endl;
+	} else if (type == 5){
+		cout << "Left Integer Can't Be Greater Than Right Integer When Declaring an Array - " << var << endl;
 	}
 }
 
