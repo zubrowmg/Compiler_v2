@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iterator>
 
+#include "Error.h"
 #include "Structures.h"
 #include "SymbolTable.h"
 
@@ -38,11 +39,21 @@ void SymbolTable::addNewProc(Token tok){
 
 }
 
-void SymbolTable::addIdentVariable(Token tok, string variable_type, bool global_variable){
+void SymbolTable::addIdentVariable(Token tok, string variable_type, bool global_variable, int left, int right){
 	SymbolNode new_ident_variable; 
 
 	new_ident_variable.ident_name = tok.actual_value;
 	new_ident_variable.ident_variable_type = variable_type;
+	new_ident_variable.array_left = left;
+	new_ident_variable.array_right = right;
+	new_ident_variable.array_size = right - left + 1;
+
+	if (new_ident_variable.array_size > 1){
+		new_ident_variable.is_array = true;
+	}
+	if (left > right){
+		error_handler.error(tok.line_number, 5, tok.actual_value);
+	}
 
 	if (global_variable){
 		(global->table)[tok.actual_value] = new_ident_variable;								// Add in global table

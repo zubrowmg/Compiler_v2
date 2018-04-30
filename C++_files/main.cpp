@@ -31,7 +31,7 @@ void startPass2(){
 	//wrapper.print();
 	while (tok.type != "T_ENDFILE"){
 		tok = scan.getToken();
-		wrapper.getToken(tok);
+		wrapper.recieveToken(tok);
 	}
 
 	wrapper.printSymbolTable();

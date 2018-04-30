@@ -1,12 +1,13 @@
 program RecursiveFib is
 
 global integer x;
-integer i;
-integer max;
+char i;
+bool max[0:5];
 
 procedure Fib(integer val in, integer ret out)
 	integer tmp[0:2];
 	global integer test;
+bool bl;
 	procedure Sub(integer val1 in, integer val2 inout)
 			integer test2;
 		begin
@@ -33,6 +34,7 @@ end procedure;
 
 procedure Sub2(integer val1 in, integer val2 inout)
 		integer test3;
+	char cch[8:11];
 procedure Sub3(integer val1 in, integer val2 inout)
 		integer test4;
 
