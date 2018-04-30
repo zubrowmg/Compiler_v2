@@ -1,9 +1,5 @@
 #include <fstream>
 #include <iostream>
-<<<<<<< HEAD
-#include <iostream>
-=======
->>>>>>> symbol_table
 #include <iomanip>
 #include <cstdlib>
 #include <string>
@@ -13,17 +9,6 @@ using namespace std;
 
 #include "WrapperPass2.h"
 #include "Structures.h"
-<<<<<<< HEAD
-
-WrapperPass2::WrapperPass2(){
-	prev_program = false, prev_ident = false, prev_is = false, prev_global = false, prev_integer = false, prev_procedure = false, prev_begin = false, prev_end = false, prev_semicolon = false;
-	prev_char = false, prev_string = false, prev_bool = false, prev_float = false; prev2_program = false, prev2_end = false, print_flag_flow = false, prev2_procedure = false;
-
-	current_procedure.push("global");
-}
-
-void WrapperPass2::getToken(Token tok){
-=======
 #include "SymbolTable.h"
 
 WrapperPass2::WrapperPass2(){
@@ -64,7 +49,6 @@ void WrapperPass2::recieveToken(Token tok){
 
 
 
->>>>>>> symbol_table
 
 	/*------------------------------------------  
 	Print Functionality
@@ -73,10 +57,6 @@ void WrapperPass2::recieveToken(Token tok){
 	setFlags(tok);
 }
 
-<<<<<<< HEAD
-void WrapperPass2::print(){print_flag_flow = true;}
-
-=======
 void WrapperPass2::addGlobalToSymbolTable(Token tok){
 	// Integer
 	if (prev_global && tok.type == "T_INTEGER" || (tok.type == "T_INTEGER" && current_part_of_program == "global_declare")){
@@ -185,7 +165,6 @@ void WrapperPass2::addGlobalToSymbolTable(Token tok){
 
 void WrapperPass2::printSymbolTable(){sym.print();}
 void WrapperPass2::print(){print_flag_flow = true;}
->>>>>>> symbol_table
 void WrapperPass2::setFlags(Token tok){
 
 	//current_part_of_program
@@ -218,16 +197,6 @@ void WrapperPass2::setFlags(Token tok){
 																																							// Into Proc Parameters
 	if (prev2_program && prev_ident && tok.type == "T_IS"){current_part_of_program = "global_declare"; }					// Into Global Declare
 
-<<<<<<< HEAD
-	if (prev_end){prev2_end = true;} else {prev2_end = false;}
-	if (prev_program){prev2_program = true;} else {prev2_program = false;}
-	if (prev_procedure){prev2_procedure = true;} else {prev2_procedure = false;}
-
-	if (tok.type == "T_PROGRAM"){prev_program = true;} else {prev_program = false;}
-	if (tok.type == "T_IDENTIFIER"){prev_ident = true; prev_ident_tok = tok;} else {prev_ident = false;}
-	if (tok.type == "T_IS"){prev_is = true;} else {prev_is = false;}
-	if (tok.type == "T_GLOBAL"){prev_is = true;} else {prev_is = false;}
-=======
 	if (prev2_global){prev3_global = true;} else {prev3_global = false;}
 
 	if (prev_global){prev2_global = true;} else {prev2_global = false;}
@@ -245,7 +214,6 @@ void WrapperPass2::setFlags(Token tok){
 	if (tok.type == "T_IDENTIFIER"){prev_ident = true; prev_ident_tok = tok;} else {prev_ident = false;}
 	if (tok.type == "T_IS"){prev_is = true;} else {prev_is = false;}
 	if (tok.type == "T_GLOBAL"){prev_global = true;} else {prev_global = false;}
->>>>>>> symbol_table
 	if (tok.type == "T_INTEGER"){prev_integer = true;} else {prev_integer = false;}
 	if (tok.type == "T_CHAR"){prev_char = true;} else {prev_char = false;}
 	if (tok.type == "T_STRING"){prev_string = true;} else {prev_string = false;}

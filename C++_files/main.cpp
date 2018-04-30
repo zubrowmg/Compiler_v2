@@ -28,13 +28,6 @@ bool parameterCheck(int argc, char *argv[]){
 }
 
 void startPass2(){
-<<<<<<< HEAD
-	wrapper.print();
-	while (tok.type != "T_ENDFILE"){
-		tok = scan.getToken();
-		wrapper.getToken(tok);
-	}
-=======
 	//wrapper.print();
 	while (tok.type != "T_ENDFILE"){
 		tok = scan.getToken();
@@ -42,7 +35,6 @@ void startPass2(){
 	}
 
 	wrapper.printSymbolTable();
->>>>>>> symbol_table
 }
 
 int main(int argc, char *argv[]){	
